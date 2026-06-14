@@ -1,0 +1,65 @@
+@startuml
+package "com.example.geteventease" {
+  class MainActivity
+  class "GETEventEaseNavHost"
+}
+
+package "com.example.geteventease.navigation" {
+  class Routes
+  class BottomNavItem
+}
+
+package "com.example.geteventease.data" {
+  class EventRepository
+  class FakeData <<singleton>>
+  class EventStatus <<enumeration>>
+  class StatusResolver <<singleton>>
+}
+
+package "com.example.geteventease.data.local" {
+  class AppDatabase
+  class EventEntity
+}
+
+package "com.example.geteventease.data.model" {
+  class EventCategory <<enumeration>>
+}
+
+package "com.example.geteventease.ui.screens" {
+  class SplashScreen
+  class SelectionScreen
+  class HomeScreen
+  class EventsScreen
+  class CalendarScreen
+  class NotificationsScreen
+  class ProfileScreen
+  class EventDetailScreen
+  class AdminLoginScreen
+  class AdminDashboard
+  class AdminAddEventScreen
+}
+
+package "com.example.geteventease.ui.viewmodel" {
+  class HomeViewModel
+}
+
+MainActivity --> "GETEventEaseNavHost" : setContent
+"GETEventEaseNavHost" --> SplashScreen : affiche
+"GETEventEaseNavHost" --> SelectionScreen : affiche
+"GETEventEaseNavHost" --> HomeScreen : affiche
+"GETEventEaseNavHost" --> EventsScreen : affiche
+"GETEventEaseNavHost" --> CalendarScreen : affiche
+"GETEventEaseNavHost" --> NotificationsScreen : affiche
+"GETEventEaseNavHost" --> ProfileScreen : affiche
+"GETEventEaseNavHost" --> EventDetailScreen : affiche
+"GETEventEaseNavHost" --> AdminLoginScreen : affiche
+"GETEventEaseNavHost" --> AdminDashboard : affiche
+"GETEventEaseNavHost" --> AdminAddEventScreen : affiche
+HomeScreen --> HomeViewModel : utilise
+EventsScreen --> EventRepository : utilise
+EventDetailScreen --> EventRepository : utilise
+AdminDashboard --> EventRepository : utilise
+HomeViewModel --> EventRepository : utilise
+EventRepository --> FakeData : charge les données
+EventRepository --> AppDatabase : persiste / récupère
+@enduml

@@ -1,0 +1,30 @@
+@startuml
+start
+:Ouvrir l'application;
+:Afficher l'écran de splash;
+:Afficher l'écran de sélection;
+if (Accès étudiant ?) then (oui)
+  :Afficher l'accueil;
+  if (Sélection d'un événement ?) then (oui)
+    :Afficher les détails de l'événement;
+  endif
+  if (Accès à l'agenda ?) then (oui)
+    :Afficher l'écran agenda;
+  endif
+  if (Accès aux notifications ?) then (oui)
+    :Afficher l'écran notifications;
+  endif
+  if (Accès au profil ?) then (oui)
+    :Afficher l'écran profil;
+  endif
+else (admin)
+  :Afficher l'écran de connexion administrateur;
+  if (Connexion réussie ?) then (oui)
+    :Afficher le tableau de bord admin;
+    if (Ajouter un événement ?) then (oui)
+      :Afficher le formulaire d'ajout d'événement;
+    endif
+  endif
+endif
+stop
+@enduml

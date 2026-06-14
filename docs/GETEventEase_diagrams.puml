@@ -1,0 +1,157 @@
+@startuml
+left to right direction
+actor Utilisateur
+actor Administrateur as Admin
+
+rectangle "GET Events" {
+  ("Voir l'accueil")
+  ("Consulter catégories")
+  ("Voir détail excursion")
+  ("Voir liste matchs")
+  ("Voir détail match")
+  ("Voir liste TCO")
+  ("Voir détail activité TCO")
+  ("Voir liste pédagogie")
+  ("Voir détail filière pédagogique")
+  ("Gérer événements")
+  ("Gérer utilisateurs")
+}
+
+Utilisateur --> ("Voir l'accueil")
+Utilisateur --> ("Consulter catégories")
+Utilisateur --> ("Voir détail excursion")
+Utilisateur --> ("Voir liste matchs")
+Utilisateur --> ("Voir détail match")
+Utilisateur --> ("Voir liste TCO")
+Utilisateur --> ("Voir détail activité TCO")
+Utilisateur --> ("Voir liste pédagogie")
+Utilisateur --> ("Voir détail filière pédagogique")
+
+Admin --> ("Gérer événements")
+Admin --> ("Gérer utilisateurs")
+@enduml
+
+@startuml
+package "com.example.geteventease" {
+  class MainActivity
+  class "GETEventEaseNavHost" as NavHost
+  class HomeScreen
+  class FakeData <<singleton>>
+  class EventCategory <<enumeration>>
+  class EventStatus <<enumeration>>
+  class StatusResolver <<singleton>>
+  class Excursion
+  class MatchInterclasse
+  class PedagogieFiliere
+  class SemaineTcoActivite <<abstract>>
+  class HomeMenuCard
+  class ContentItemCard
+  class DetailComponents
+  class StatusBadge
+}
+
+package "com.example.geteventease.navigation" {
+  class AppNavigation
+}
+
+package "com.example.geteventease.data.model" {
+  class Sport <<enumeration>>
+  class FilierePedagogie <<enumeration>>
+  class SemaineActiviteType <<enumeration>>
+}
+
+NavHost --> HomeScreen : affiche
+NavHost --> FakeData : charge données
+NavHost --> MatchInterclasse : utilise
+NavHost --> Excursion : utilise
+NavHost --> PedagogieFiliere : utilise
+NavHost --> SemaineTcoActivite : utilise
+
+MainActivity --> NavHost : contient
+HomeScreen --> EventCategory : sélectionne
+FakeData --> Excursion : fournit
+FakeData --> MatchInterclasse : fournit
+FakeData --> PedagogieFiliere : fournit
+FakeData --> SemaineTcoActivite : fournit
+
+Excursion --> StatusResolver : status()
+MatchInterclasse --> StatusResolver : status()
+PedagogieFiliere --> StatusResolver : status()
+SemaineTcoActivite --> StatusResolver : status()
+
+SemaineTcoActivite <|-- "Jardinage"
+SemaineTcoActivite <|-- "Conference"
+SemaineTcoActivite <|-- "AlgoContest"
+SemaineTcoActivite <|-- "ConcoursMiniProjet"
+SemaineTcoActivite <|-- "Esport"
+SemaineTcoActivite <|-- "FinalInterclasse"
+SemaineTcoActivite <|-- "GrandeReception"
+@enduml
+
+@startuml
+package "Architecture du projet" {
+  [MainActivity]
+  [navigation/AppNavigation.kt]
+  [ui/screens/HomeScreen.kt]
+  [ui/screens/MatchInterclasseScreen.kt]
+  [ui/screens/PedagogieScreen.kt]
+  [ui/screens/SemaineTcoScreen.kt]
+  [ui/screens/ExcursionScreen.kt]
+  [ui/components/HomeMenuCard.kt]
+  [ui/components/ContentItemCard.kt]
+  [ui/components/DetailComponents.kt]
+  [ui/components/StatusBadge.kt]
+  [data/FakeData.kt]
+  [data/StatusResolver.kt]
+  [data/model/EventCategory.kt]
+  [data/model/MatchInterclasse.kt]
+  [data/model/Excursion.kt]
+  [data/model/PedagogieFiliere.kt]
+  [data/model/SemaineTcoActivite.kt]
+}
+
+[MainActivity] --> [navigation/AppNavigation.kt]
+[navigation/AppNavigation.kt] --> [ui/screens/HomeScreen.kt]
+[navigation/AppNavigation.kt] --> [ui/screens/MatchInterclasseScreen.kt]
+[navigation/AppNavigation.kt] --> [ui/screens/SemaineTcoScreen.kt]
+[navigation/AppNavigation.kt] --> [ui/screens/PedagogieScreen.kt]
+[navigation/AppNavigation.kt] --> [ui/screens/ExcursionScreen.kt]
+[ui/screens/HomeScreen.kt] --> [ui/components/HomeMenuCard.kt]
+[ui/screens/MatchInterclasseScreen.kt] --> [ui/components/ContentItemCard.kt]
+[ui/screens/ExcursionScreen.kt] --> [ui/components/DetailComponents.kt]
+[ui/screens/MatchInterclasseScreen.kt] --> [ui/components/DetailComponents.kt]
+[ui/screens/SemaineTcoScreen.kt] --> [ui/components/DetailComponents.kt]
+[ui/screens/PedagogieScreen.kt] --> [ui/components/DetailComponents.kt]
+[ui/screens/*] --> [data/FakeData.kt]
+[data/FakeData.kt] --> [data/model/EventCategory.kt]
+[data/FakeData.kt] --> [data/model/MatchInterclasse.kt]
+[data/FakeData.kt] --> [data/model/Excursion.kt]
+[data/FakeData.kt] --> [data/model/PedagogieFiliere.kt]
+[data/FakeData.kt] --> [data/model/SemaineTcoActivite.kt]
+[data/model/MatchInterclasse.kt] --> [data/StatusResolver.kt]
+[data/model/Excursion.kt] --> [data/StatusResolver.kt]
+[data/model/PedagogieFiliere.kt] --> [data/StatusResolver.kt]
+[data/model/SemaineTcoActivite.kt] --> [data/StatusResolver.kt]
+@enduml
+
+@startuml
+actor Utilisateur
+participant MainActivity
+participant GETEventEaseNavHost
+participant HomeScreen
+participant FakeData
+participant MatchInterclasseListScreen
+participant MatchInterclasseDetailScreen
+
+Utilisateur -> MainActivity : Ouvre l'application
+MainActivity -> GETEventEaseNavHost : initialise la navigation
+Utilisateur -> HomeScreen : sélectionne une catégorie
+HomeScreen -> GETEventEaseNavHost : navigue vers la route
+GETEventEaseNavHost -> FakeData : récupère les données
+FakeData --> MatchInterclasseListScreen : fournit la liste
+Utilisateur -> MatchInterclasseListScreen : sélectionne un match
+MatchInterclasseListScreen -> GETEventEaseNavHost : navigate(matchId)
+GETEventEaseNavHost -> FakeData : charge le détail du match
+FakeData --> MatchInterclasseDetailScreen : fournit le modèle
+MatchInterclasseDetailScreen -> Utilisateur : affiche les détails
+@enduml

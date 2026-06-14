@@ -1,0 +1,36 @@
+@startuml
+actor Utilisateur
+participant MainActivity
+participant GETEventEaseNavHost
+participant SelectionScreen
+participant HomeScreen
+participant EventRepository
+participant EventDetailScreen
+participant AdminLoginScreen
+participant AdminDashboard
+participant AdminAddEventScreen
+
+Utilisateur -> MainActivity : Ouvre l'application
+MainActivity -> GETEventEaseNavHost : initialise la navigation
+GETEventEaseNavHost -> SelectionScreen : affiche l'écran de sélection
+Utilisateur -> SelectionScreen : choisit accès étudiant
+SelectionScreen -> GETEventEaseNavHost : navigue sur HOME
+GETEventEaseNavHost -> HomeScreen : affiche l'accueil
+HomeScreen -> EventRepository : charge les événements
+EventRepository --> HomeScreen : renvoie la liste
+Utilisateur -> HomeScreen : sélectionne un événement
+HomeScreen -> GETEventEaseNavHost : navigate(event_detail/id)
+GETEventEaseNavHost -> EventDetailScreen : affiche le détail
+EventDetailScreen -> EventRepository : charge le détail
+EventRepository --> EventDetailScreen : renvoie l'événement
+EventDetailScreen -> Utilisateur : affiche les détails
+
+Utilisateur -> SelectionScreen : choisit accès admin
+SelectionScreen -> GETEventEaseNavHost : navigue sur ADMIN_LOGIN
+GETEventEaseNavHost -> AdminLoginScreen : affiche la page de connexion
+AdminLoginScreen -> GETEventEaseNavHost : onLoginSuccess
+GETEventEaseNavHost -> AdminDashboard : affiche le tableau de bord
+AdminDashboard -> GETEventEaseNavHost : navigate(ADMIN_ADD_EVENT)
+GETEventEaseNavHost -> AdminAddEventScreen : affiche le formulaire
+AdminAddEventScreen -> Utilisateur : permet d'ajouter un événement
+@enduml

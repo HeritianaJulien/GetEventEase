@@ -1,0 +1,30 @@
+@startuml
+left to right direction
+actor Utilisateur
+actor Administrateur as Admin
+
+rectangle "GET EventEase" {
+  ("Ouvrir l'application")
+  ("Choisir accès étudiant / admin")
+  ("Voir l'accueil")
+  ("Consulter la liste d'événements")
+  ("Voir le détail d'un événement")
+  ("Consulter l'agenda")
+  ("Voir les notifications")
+  ("Voir le profil")
+  ("Se connecter en tant qu'administrateur")
+  ("Ajouter un événement")
+}
+
+Utilisateur --> ("Ouvrir l'application")
+Utilisateur --> ("Choisir accès étudiant / admin")
+Utilisateur --> ("Voir l'accueil")
+Utilisateur --> ("Consulter la liste d'événements")
+Utilisateur --> ("Voir le détail d'un événement")
+Utilisateur --> ("Consulter l'agenda")
+Utilisateur --> ("Voir les notifications")
+Utilisateur --> ("Voir le profil")
+
+Admin --> ("Se connecter en tant qu'administrateur")
+Admin --> ("Ajouter un événement")
+@enduml
